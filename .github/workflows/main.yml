@@ -17,5 +17,14 @@ jobs:
 
       - name: Restore Dependencies
         run: dotnet build
+      
+      - name: Publish artifact
+        run: dotnet publish 
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-files
+          path: publish_output/
 
         
