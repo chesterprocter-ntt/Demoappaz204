@@ -6,6 +6,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      run: echo "Hello World!" > demo.txt
+      - run: echo "Hello World!" > demo.txt
 
-      run: cat demo.txt
+      - run: cat demo.txt
