@@ -37,6 +37,14 @@ jobs:
       - name: Pack NuGet package
         run: dotnet pack --output ./nupkg
 
+      - name: Add GitHub Packages as NuGet source 
+        run: | 
+             dotnet nuget add source \
+              --username $GITHUB_ACTOR \
+              --password ${{ secrets.GITHUB_TOKEN }} \
+              --store-password-in-clear-text \
+              --name github "https://nuget.pkg.github.com/ibnehussain/index.json"
+
       # 6️⃣ Publish package to GitHub Packages
       - name: Publish to GitHub Packages
         run: dotnet nuget push "./nupkg/*.nupkg" --source "https://nuget.pkg.github.com/ibnehussain/index.json" --api-key ${{ secrets.GITHUB_TOKEN }}
