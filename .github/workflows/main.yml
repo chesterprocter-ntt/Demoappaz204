@@ -1,32 +1,42 @@
-name: Publish .NET package to GitHub Packages
+name: Publish .NET Package to GitHub Packages
 
 on:
   push:
-   branches: [master]
+    branches:
+      - main
+  workflow_dispatch:
 
-permissions: 
-   contents: read
-   packages: write
+permissions:
+  contents: read
+  packages: write   # REQUIRED to publish to GitHub Packages
 
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
 
     steps:
-
-      - name: Checkout
+      # 1️⃣ Checkout source code
+      - name: Checkout repository
         uses: actions/checkout@v4
-        
-      - name: Run custom action
-        uses: ./.github/myactionjs/build
-      
-      - name: Restore
+
+      # 2️⃣ Setup .NET SDK
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+
+      # 3️⃣ Restore dependencies
+      - name: Restore dependencies
         run: dotnet restore
-        
-      - name: Build
+
+      # 4️⃣ Build solution
+      - name: Build solution
         run: dotnet build
 
-      - name: Pack
-        run: dotnet pack --output ./demo
+      # 5️⃣ Pack (create NuGet package)
+      - name: Pack NuGet package
+        run: dotnet pack --output ./nupkg
 
-      
+      # 6️⃣ Publish package to GitHub Packages
+      - name: Publish to GitHub Packages
+        run: dotnet nuget push "./nupkg/*.nupkg" --source "https://nuget.pkg.github.com/ibnehussain/index.json" --api-key ${{ secrets.GITHUB_TOKEN }}
