@@ -26,3 +26,22 @@ jobs:
       - name: List all files in the repository
         run: ls -al
  
+      - name: Checkout code
+        uses: actions/checkout@v6.0.2
+ 
+      - name: setup SDK Azhar
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.x'
+ 
+      - name: Restore dependencies
+        run: dotnet restore
+ 
+      - name: Build
+        run: dotnet build
+ 
+      - name: Pack
+        run: dotnet pack --output ./nupkg
+
+      - name: Publis to Githaub Packages
+        run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{secrets.GITHUB_TOKEN}}  --source "https://nuget.pkg.github.com/chesterprocter-ntt/Demoappaz204"
