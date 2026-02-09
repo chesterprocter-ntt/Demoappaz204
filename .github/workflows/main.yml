@@ -1,4 +1,4 @@
-name: Starter Pipeline #Worflow name
+name: Demo Pipeline #Worflow name
 
 on: push #trigger
 
